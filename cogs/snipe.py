@@ -19,11 +19,11 @@ async def request(url):
         return await resp.json()
 
 
-async def getItem(page=0, first_page=False):
+async def getItem(page = 0, first_page = False):
     global prices
     if first_page:
         prices = {}
-    resp = await request(baseURL+str(page))
+    resp = await request(baseURL + str(page))
     for auction in resp.get('auctions', []):
         if not "bin" in auction:
             continue
@@ -71,12 +71,12 @@ class Snipe(commands.Cog):
         channel = self.bot.get_channel("CHANNEL")
         self.l.start()
     
-    @tasks.loop(seconds=61.0)
+    @tasks.loop(seconds = 61.0)
     async def l(self):
         global auc, results, channel
         results = []
         auc, data = await getItem(0, True)
-        pages = data.get('totalPages',0)
+        pages = data.get('totalPages', 0)
         await asyncio.gather(*[getItem(i) for i in range(1, pages)])
         if auc:
             for auction in auc:
